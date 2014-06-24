@@ -1,0 +1,15 @@
+class Solution:
+    # @param root, a tree node
+    # @return a boolean
+    def isSymmetric(self, root):
+        if root ==None:
+            return True
+        return self.isSymmetircRecur(root.left,root.right)
+        
+    def isSymmetircRecur(self,left,right):
+        if left ==None and right == None:
+            return True
+        if left == None or right ==None or left.val != right.val:
+            return False
+        return self.isSymmetircRecur(left.left,right.right) and self.isSymmetircRecur(left.right,right.left)
+
