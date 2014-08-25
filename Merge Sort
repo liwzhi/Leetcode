@@ -1,0 +1,38 @@
+class Sort:
+    def MergeSort(self, alist):
+        print("Splitting", alist)
+        if len(alist) >1:    
+            mid = len(alist)//2
+            lefthand = alist[:mid]
+            righthand = alist[mid:]
+            self.MergeSort(lefthand)
+            self.MergeSort(righthand)
+            
+            i = 0
+            j = 0
+            k = 0
+            while i<len(lefthand) and j<len(righthand):
+                if lefthand[i] < righthand[j]:
+                    alist[k] = lefthand[i]
+                    i = i +1
+                else:
+                    alist[k] = righthand[j]
+                    j = j +1
+                k += 1            
+            
+            while i <len(lefthand):
+                alist[k] = lefthand[i]
+                i +=1
+                k +=1
+                
+            
+            while j<len(righthand): 
+                alist[k] = righthand[j]
+                j +=1
+                k +=1
+        print("Merging ",alist)
+        
+
+Obj = Sort()
+alist = [8,1,3,4,11,3,2,5,88,6]
+result = Obj.MergeSort(alist)
