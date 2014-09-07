@@ -1,0 +1,22 @@
+class Solution:
+    def merge(self,A,m,B,n):
+      #  last = m + n -1
+        C =[]
+        while m>0 and n >0:
+            if A[m-1]>=B[n-1]:
+                C.append(A[m-1])
+                m -=1
+
+            else:
+                C.append( B[n-1])
+                n-=1
+                print n
+        while m>0:
+            m -=1
+            C.append(A[m])
+
+        while n>0:
+            n -=1
+            C.append(B[n])
+           
+        return C
