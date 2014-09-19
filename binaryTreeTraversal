@@ -1,0 +1,59 @@
+class Solution:
+    def __init__(self,x):
+        self.val = x
+        self.left = None
+        self.right= None
+    def postorderTraversal(self,root):
+        result = []
+        self.recur(root,result)
+        return result
+    def recur(self,root,result):
+        if (root ==None):
+            return 
+        self.recur(root.left,result)
+        self.recur(root.right,result)
+        print root.val
+        result.append(root.val)
+    
+    def preorderTraversal(self,root):
+        result = []
+        print 'pre order'
+        self.recurPre(root,result)
+        return result
+    def recurPre(self,root,result):
+        if (root ==None):
+            return
+        result.append(root.val)
+        print root.val
+        self.recurPre(root.left,result)
+        self.recurPre(root.right,result)
+        
+        
+    def inorderTraversal(self,root):
+        result = []
+        print 'In order traversal'
+        self.recurInorder(root,result)
+        return result
+    def recurInorder(self,root,result):
+        if (root==None):
+            return 
+        self.recurInorder(root.left,result)
+        print root.val
+        result.append(root.val)
+        self.recurInorder(root.right,result)
+        
+        
+a = Solution(1)
+
+b = Solution(2)
+c = Solution(3)
+d = Solution(4)
+e = Solution(5)
+
+a.left = b
+a.right = d
+b.left = c
+d.right = e
+print a.postorderTraversal(a)
+print a.preorderTraversal(a)
+print a.inorderTraversal(a)
