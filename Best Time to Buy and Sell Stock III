@@ -1,0 +1,24 @@
+class Solution:
+    # @param prices, a list of integer
+    # @return an integer
+    def maxProfit(self,prices):
+        if len(prices)==1:
+            return 0
+        output0 = [0 for i in range(len(prices))]
+        output1 = [0 for i in range(len(prices))]
+        local = 0
+
+        for i in range(1,len(prices)):
+            local = max(local+prices[i]-prices[i-1],0)
+            output0[i] = max(local,output0[i-1])
+        
+        local = 0
+        for i in range(len(prices)-2,-1,-1):
+            local = max(local+prices[i+1]-prices[i],0)
+            output1[i] = max(local,output1[i+1])                
+        res = 0
+        for i in range(len(prices)):
+            if output0[i] + output1[i]>res:
+                res = output0[i]+output1[i]
+        return res
+        
