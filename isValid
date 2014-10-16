@@ -1,0 +1,21 @@
+class Solution:
+    # @return a boolean
+    def isValid(self,s):
+        if len(s)==0:
+            return True
+        save = [s[0]]
+        Map = {'(':')','{':'}','[':']'}
+        for i in range(1,len(s)):
+            
+            if len(save)>0:
+                a = save.pop()
+                if (a in Map and s[i]==Map[a]):
+                    save = save
+                else:
+                    save.append(a)
+                    save.append(s[i])
+            else:
+                save.append(s[i])
+        if len(save) ==0:
+            return True
+        return False
