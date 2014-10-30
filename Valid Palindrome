@@ -1,0 +1,15 @@
+class Solution:
+    # @param s, a string
+    # @return a boolean
+    def isPalindrome(self,s):
+        s = ''.join(ch for ch in s if ch.isalnum()).lower()
+        star = 0
+        end = len(s)-1
+        sign = True
+        while(star<=end and sign):
+            if s[star] == s[end]:
+                star +=1
+                end -=1
+            else:
+                sign = False
+        return sign
