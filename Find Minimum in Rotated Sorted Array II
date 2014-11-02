@@ -1,0 +1,24 @@
+class Solution:
+    # @param num, a list of integer
+    # @return an integer
+    def findMin(self,num):
+        if len(num)==0:
+            return num
+        if len(num)==1:
+            return num[0]
+        low = 0
+        high = len(num)-1
+        minValue = num[0]
+        while(low<high):
+            mid = (low+high)/2
+            if num[low]<num[mid]:
+                minValue = min(num[low],minValue)
+                low = mid +1
+            elif num[low]>num[mid]:
+                minValue = min(num[mid],minValue)
+                high = mid -1
+            else:
+                low +=1
+        minValue = min(num[low],minValue)
+        minValue = min(num[high],minValue)
+        return minValue
