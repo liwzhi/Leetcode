@@ -1,0 +1,19 @@
+class Code:
+    def connect(self,root):
+        if root ==None:
+            return root
+        queue = [root]
+        while(queue):
+            levelQueue = []
+#            first = queue[0]
+            for i in range(len(queue)):
+                curr = queue[i]
+                if i<len(queue)-1:
+                    curr.next = queue[i+1]
+                if curr.left !=None:
+                    levelQueue.append(curr.left)
+                if curr.right !=None:
+                    levelQueue.append(curr.right)
+            
+            queue = levelQueue
+        return root 
