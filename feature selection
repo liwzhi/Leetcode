@@ -1,0 +1,174 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 18 10:01:23 2014
+
+@author: Valued Customer
+"""
+
+import os
+from sklearn.cross_validation import LeaveOneOut
+from sklearn import cross_validation
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn.ensemble import ExtraTreesClassifier
+
+
+classTypepath = scipy.io.loadmat('C:/Users/Valued Customer/Downloads/ADHD20130908simple.mat')
+
+
+X = classTypepath['x']
+y = classTypepath['y']
+loo = LeaveOneOut(y.shape[0])        
+
+#%% Not feature selection
+clf = svm.SVC(kernel='linear', C=1)
+scores = cross_validation.cross_val_score(clf, X, y.ravel(), cv=loo)
+print scores.mean()
+
+
+from sklearn.metrics import accuracy_score
+#%%
+import numpy as np
+importances = clf.feature_importances_
+indices = np.argsort(importances)[::-1]
+
+#%% giving the first score
+scores = cross_validation.cross_val_score(clf, X[:,:1], y.ravel(), cv=loo)
+scoreFirst = scores.mean()
+for i in range(2,len(indices)):
+    feature = X[:,indices[:i]]
+    scores = cross_validation.cross_val_score(clf, feature, y.ravel(), cv=loo)
+    score = scores.mean()
+    if score<=scoreFirst:
+        print 'the score is %f and the feature number is %f' % (score,i-1)
+        scoreFirst = score
+   
+
+    scoreFirst = score
+
+error = []
+trueError = []
+globalError = 0
+errorStore = []
+trueErrorStore = []
+
+#for i in range(1,len(indices)):
+#    feature = X[:,indices[:i]]
+#    for train,test in loo:
+#
+#        y_pred = clf.fit(feature[train,:],y[train].ravel()).predict(feature[train,:])
+#        error.append(accuracy_score(y[train], y_pred))
+#        
+#        y_test = clf.predict(feature[test,:])
+#        trueError.append(accuracy_score(y[test].ravel(), y_test))
+#    errorStore.append(sum(error)/float(len(error)))
+#    trueErrorStore.append(sum(trueError)/float(len(trueError)))
+#    error = []
+#    trueError = []
+#import pylab as plt
+#plt.figure()
+#plt.plot(np.arange(len(errorStore)),trueError)
+#    errorUpdate= (sum(error)/float(len(error)))
+#    trueError = (sum(trueError)/float(len(trueError)))
+#    globalError = max(globalError,errorUpdate)
+    
+
+
+#%% do the feature selection
+# L1 based feature selection
+clf = svm.SVC(kernel='linear', C=1)
+from sklearn.svm import LinearSVC
+X_new = LinearSVC(C=1, penalty="l1", dual=False).fit_transform(X, y)
+feature = X_new
+error = []
+trueError = []
+for train,test in loo:
+
+    
+    y_pred = clf.fit(feature[train,:],y[train].ravel()).predict(feature[train,:])
+    error.append(accuracy_score(y[train], y_pred))
+    
+    y_test = clf.predict(feature[test,:])
+    trueError.append(accuracy_score(y[test].ravel(), y_test))
+
+print 'The train error is %f' % (sum(error)/float(len(error)))
+print 'the test error is %f' % (sum(trueError)/float(len(trueError)))
+
+    
+#%% filter method
+from sklearn.feature_selection import SelectKBest  
+from sklearn.feature_selection import chi2
+
+X_new = SelectKBest(chi2, k=12).fit_transform(X, y)
+
+index = SelectKBest(chi2, k=12).fit(X,y).get_support(indices=True)
+feature = X_new
+error = []
+trueError = []
+for train,test in loo:
+
+    
+    y_pred = clf.fit(feature[train,:],y[train].ravel()).predict(feature[train,:])
+    error.append(accuracy_score(y[train], y_pred))
+    
+    y_test = clf.predict(feature[test,:])
+    trueError.append(accuracy_score(y[test].ravel(), y_test))
+
+print 'The train error is %f' % (sum(error)/float(len(error)))
+print 'the test error is %f' % (sum(trueError)/float(len(trueError)))
+
+#%% do the random forest
+from sklearn.ensemble import ExtraTreesClassifier
+clf = ExtraTreesClassifier(max_features = 'sqrt')
+
+X = X[:,index]
+clf.fit(X, y)
+importances = clf.feature_importances_
+indices = np.argsort(importances)[::-1]
+
+X_new = X[:,indices[:6]]
+
+feature = X_new
+print 'the number of features you choose %d' %(X_new.shape[1])
+error = []
+trueError = []
+for train,test in loo:
+   
+    y_pred = clf.fit(feature[train,:],y[train].ravel()).predict(feature[train,:])
+    error.append(accuracy_score(y[train], y_pred))
+    
+    y_test = clf.predict(feature[test,:])
+    trueError.append(accuracy_score(y[test].ravel(), y_test))
+
+print 'The train error is %f' % (sum(error)/float(len(error)))
+print 'the test error is %f' % (sum(trueError)/float(len(trueError)))
+
+
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
